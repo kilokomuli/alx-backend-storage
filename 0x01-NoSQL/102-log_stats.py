@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Improve 12-log_stats.py"""
+from pymongo import MongoClient
 
 
 def log_stats():
