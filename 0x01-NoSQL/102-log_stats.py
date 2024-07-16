@@ -3,9 +3,9 @@
 from pymongo import MongoClient
 
 
-def log_stats():
-    """ log_stats.
-    """
+def nginx_log_stats():
+    """ add the top 10 of the most present IPs in the collection
+    nginx of the database logs"""
     client = MongoClient('mongodb://127.0.0.1:27017')
     logs_collection = client.logs.nginx
     total = logs_collection.count_documents({})
@@ -37,4 +37,4 @@ def log_stats():
 
 
 if __name__ == "__main__":
-    log_stats()
+    nginx_log_stats()
