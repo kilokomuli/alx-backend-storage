@@ -5,19 +5,25 @@ from pymongo import MongoClient
 
 def nginx_log_stats():
     """Provides some stats about Nginx logs stored in MongoDB"""
-    client = MongoClient("mongodb://localhost:27017")
-    db = client.logs
-    collection = db.nginx
-    total_logs = collection.cdocs({})
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    m = {method: collection.cdocs({'method': method}) for method in methods}
-    status_check = collection.cdocs({'method': 'GET', 'path': '/status'})
-    print(f"{total_logs} logs")
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    logs_collection = client.logs.nginx
+    total = logs_collection.count_documents({})
+    get = logs_collection.count_documents({"method": "GET"})
+    post = logs_collection.count_documents({"method": "POST"})
+    put = logs_collection.count_documents({"method": "PUT"})
+    patch = logs_collection.count_documents({"method": "PATCH"})
+    delete = logs_collection.count_documents({"method": "DELETE"})
+    path = logs_collection.count_documents(
+        {"method": "GET", "path": "/status"})
+    print(f"{total} logs")
     print("Methods:")
-    for method in methods:
-        print(f"\tmethod {method}: {m[method]}")
-    print(f"{status_check} status check")
+    print(f"\tmethod GET: {get}")
+    print(f"\tmethod POST: {post}")
+    print(f"\tmethod PUT: {put}")
+    print(f"\tmethod PATCH: {patch}")
+    print(f"\tmethod DELETE: {delete}")
+    print(f"{path} status check")
 
 
 if __name__ == "__main__":
-    log_stats()
+    nginx_log_stats()
