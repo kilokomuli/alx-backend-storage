@@ -25,7 +25,7 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
-    
+
     def get(
             self,
             key: str,
@@ -55,7 +55,7 @@ class Cache:
             str: The data stored in Redis under the given key as a string.
         """
         return self.get(key, lambda x: x.decode('utf-8'))
-    
+
     def get_int(self, key: str) -> int:
         """
         Retrieves the data stored in Redis under the given key as an integer.
