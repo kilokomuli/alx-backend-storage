@@ -2,8 +2,24 @@
 """Module with statements of storing data with redis"""
 import redis
 import uuid
-from typing import Union, Callable
+from functools import wraps
+from typing import Any, Union, Callable
 
+
+def count_calls(method: Callable) -> Callable:
+    """Implements a system to count how many times methods
+    of the cache class are called
+    Args:
+        method (callable): The method to decorate
+    Returns:
+        Callable the wrapped method with counting functionality
+    """
+    @wraps(method)
+    def counter(self, *args, **kwargs) -> Any:
+        """Increments the count for the method call and then calls the method"""
+        self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwargs)
+    return counter
 
 class Cache:
     def __init__(self):
