@@ -9,7 +9,7 @@ from typing import Callable
 redis_store = redis.Redis()
 
 
-def data_cacher(method: Callable) -> Callable:
+def cache_page(method: Callable) -> Callable:
     """Caches the output of fetched data."""
     @wraps(method)
     def invoker(url) -> str:
@@ -25,9 +25,9 @@ def data_cacher(method: Callable) -> Callable:
     return invoker
 
 
-@data_cacher
+@cache_page
 def get_page(url: str) -> str:
-    '''Returns the content of a URL after caching the request's response,
+    """Returns the content of a URL after caching the request's response,
     and tracking the request.
-    '''
+    """
     return requests.get(url).text
