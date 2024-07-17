@@ -16,10 +16,12 @@ def count_calls(method: Callable) -> Callable:
     """
     @wraps(method)
     def counter(self: Any, *args, **kwargs) -> str:
-        """Increments the count for the method call and then calls the method"""
+        """Increments the count for the method call and
+        then calls the method"""
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
     return counter
+
 
 def call_history(method: Callable) -> Callable:
     """ Decorator for Cache class method to track args
@@ -35,6 +37,7 @@ def call_history(method: Callable) -> Callable:
         return output
     return wrapper
 
+
 def replay(fn: Callable) -> None:
     """ Check redis for how many times a function was called and display:
     """
@@ -47,6 +50,7 @@ def replay(fn: Callable) -> None:
     print(f'{fn.__qualname__} was called {calls} times:')
     for input, output in zip(inputs, outputs):
         print(f'{fn.__qualname__}(*{input}) -> {output}')
+
 
 class Cache:
     def __init__(self):
