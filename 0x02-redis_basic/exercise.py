@@ -15,7 +15,7 @@ def count_calls(method: Callable) -> Callable:
         Callable the wrapped method with counting functionality
     """
     @wraps(method)
-    def counter(self, *args, **kwargs) -> Any:
+    def counter(self: Any, *args, **kwargs) -> str:
         """Increments the count for the method call and then calls the method"""
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
