@@ -53,6 +53,7 @@ def replay(fn: Callable) -> None:
 
 
 class Cache:
+    """Cache class"""
     def __init__(self):
         """
         Initializes an instance of the class cache.
