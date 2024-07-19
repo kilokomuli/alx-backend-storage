@@ -19,15 +19,15 @@ def cache_page(method: Callable) -> Callable:
         if result:
             return result.decode('utf-8')
         result = method(url)
-        redis_store.set(f'count:{url}', 0)
         redis_store.setex(f'result:{url}', 10, result)
         return result
     return invoker
-
 
 @cache_page
 def get_page(url: str) -> str:
     """Returns the content of a URL after caching the request's response,
     and tracking the request.
     """
-    return requests.get(url).text
+    response = request.get(url)
+    reponse.raise_for_status()
+    return response.text
