@@ -23,11 +23,10 @@ def cache_page(method: Callable) -> Callable:
         return result
     return invoker
 
+
 @cache_page
 def get_page(url: str) -> str:
     """Returns the content of a URL after caching the request's response,
     and tracking the request.
     """
-    response = request.get(url)
-    reponse.raise_for_status()
-    return response.text
+    return requests.get(url).text
