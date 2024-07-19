@@ -6,18 +6,20 @@ from functools import wraps
 from typing import Callable
 
 
+redis_store = redis.Redis()
+
+
 def cache_page(method: Callable) -> Callable:
     """Caches the output of fetched data."""
     @wraps(method)
-    def invoker(url: str) -> str:
+    def invoker(url):
         """The wrapper function for caching the output."""
-        redis_store = redis.Redis()
         redis_store.incr(f'count:{url}')
-        result = redis_store.get(f'{url}')
+        result = redis_store.get(f'cached:{url}')
         if result:
             return result.decode('utf-8')
         result = method(url)
-        redis_store.set(f'{url}', result, 10)
+        redis_store.setex(f'cahed:{url}', 10, result)
         return result
     return invoker
 
@@ -27,4 +29,5 @@ def get_page(url: str) -> str:
     """Returns the content of a URL after caching the request's response,
     and tracking the request.
     """
-    return requests.get(url).text
+    re = requests.get(url)
+    return re.text
